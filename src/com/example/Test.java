@@ -60,7 +60,7 @@ public class Test {
 
     }
 
-    static void addBook(Scanner s, BookStore bookStore, ArrayList<Stock> books) {
+    static void addBook(Scanner s, BookStore bookStore, ArrayList<Stock> stocks) {
         System.out.print("Enter Book Title: ");
         String title = s.nextLine();
         System.out.print("Enter Book Price: ");
@@ -68,7 +68,7 @@ public class Test {
         System.out.print("Enter Quantity: ");
         int quantiy = s.nextInt();
         Book newBook = new Book(title, price, quantiy);
-        books.add(newBook);
+        stocks.add(newBook);
         System.out.println("Book Added SuccessFully!");
     }
 

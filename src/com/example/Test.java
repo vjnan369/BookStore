@@ -1,21 +1,25 @@
 package com.example;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Test {
     public static void main(String args[]) {
         Scanner s = new Scanner(System.in);
         System.out.println("Welcome to Jnan Bookstore!");
-        BookStore bookStore = new BookStore();
-        ArrayList<Stock> stocks = bookStore.getBooksList();
-        System.out.println("Select 1 for Adding a new Book");
-        System.out.println("Select 2 for Listing all Book");
+        System.out.println("Select 1 for purchase a new Book");
+        System.out.println("Select 2 to count number of books");
         System.out.println("Select 3 for Show given Book Details");
-        System.out.println("Select 4 to know the stock dispatch area");
-        System.out.println("Select 5 to purchase a book ");
-        System.out.println("Select 6 to return a book ");
+        System.out.println("Select 4 to to get the store name");
+        System.out.println("Select 5 to to show all book details");
         System.out.println("Select 0 to Exit");
+        Store store = new BookStore("1009");
+        store.add(new History("Gandhi", "10214", 300.0, "Sam"));
+        store.add(new Humour("The chaplin", "10114", 200.0, "Chaplin"));
+        store.add(new SciFi("Interstellar", "10200", 500.0, "Nolan"));
+        store.add(new Biography("Wings of Fire", "10201", 100.0, "Kalam"));
+        store.add(new Biography("Playing it my way", "10202", 800.0, "Sachin"));
+
         int userChoice;
         do {
             System.out.print("Enter Your Choice: ");
@@ -23,67 +27,44 @@ public class Test {
             s.nextLine();
             switch (userChoice) {
                 case 1:
-                    addBook(s, bookStore, stocks);
+                    System.out.print("Enter book id to purchase:");
+                    String newBookId = s.nextLine();
+                    store.purchase(newBookId);
                     break;
                 case 2:
-                    System.out.println("List of Books");
-                    System.out.println("==============================================");
-                    System.out.println("NAME     PRICE    QUANTITY");
-                    System.out.println("==============================================");
-                    for(int i = 0; i<stocks.size(); i++) {
-                        System.out.println(stocks.get(i).getTitle()+ "    "+ stocks.get(i).getPrice() +"      "+ stocks.get(i).getQuantity());
-                    }
-                    System.out.println();
+                    System.out.println("Number of books are: " + store.getBooksCount());
                     break;
                 case 3:
-                    System.out.print("Enter book Title: ");
-                    String str = s.nextLine();
-                    getBookDetails(str, s, bookStore);
+                    System.out.print("Enter book id to show the details: ");
+                    String bookId = s.nextLine();
+                    System.out.println("Book Details are:");
+                    getBookDetails(bookId, store);
                     break;
                 case 4:
-                    System.out.print("Stock Dispatch Area is : ");
-                    System.out.println(bookStore.getStockDispatch());
+                    System.out.println("Store Id is: "+store.getStoreId());
                     break;
                 case 5:
-                    System.out.print("Enter Book name to Buy:");
-                    String purchaseBook = s.nextLine();
-                    bookStore.purchaseBook(purchaseBook);
-                    System.out.println("Book Purchased Successfully!");
-                    break;
-                case 6:
-                    System.out.print("Enter Book name to Return:");
-                    String returnBook = s.nextLine();
-                    bookStore.returnBook(returnBook);
-                    System.out.println("Book Returned Successfully!");
+                    System.out.println("================List of Books are========================");
+                    getAllBookDetails(store);
+
             }
         } while (userChoice != 0);
 
     }
 
-    static void addBook(Scanner s, BookStore bookStore, ArrayList<Stock> stocks) {
-        System.out.print("Enter Book Title: ");
-        String title = s.nextLine();
-        System.out.print("Enter Book Price: ");
-        Double price = s.nextDouble();
-        System.out.print("Enter Quantity: ");
-        int quantiy = s.nextInt();
-        Book newBook = new Book(title, price, quantiy);
-        stocks.add(newBook);
-        System.out.println("Book Added SuccessFully!");
+    static void getBookDetails(String bookId, Store store) {
+        Book bookDetails = store.getBookDetails(bookId);
+        System.out.println("Book Title:" + bookDetails.getTitle());
+        System.out.println("Book Id:" + bookDetails.getBookId());
+        System.out.println("Book Author:" + bookDetails.getAuthor());
+        System.out.println("Book Price:" + bookDetails.getPrice());
     }
 
-    static void getBookDetails(String str, Scanner s, BookStore bookStore) {
-        Stock stock = bookStore.getBookDetails(str);
-        if (stock != null) {
-            System.out.println("Book Details are: ");
-            System.out.println("Book Title: " + stock.getTitle());
-            System.out.println("Book Price: "+ stock.getPrice());
-            System.out.println("Book Quantity: " + stock.getQuantity());
-
-        } else {
-            System.out.println("No book available with given name!");
+    static void getAllBookDetails(Store store) {
+        List<Book> books = store.getAllBooks();
+        System.out.println("Title         Id        Author         Price");
+        for(Book book : books) {
+            System.out.println(book.getTitle()+ "       " + book.getBookId() +"    " +book.getAuthor()+"     "+book.getPrice());
         }
     }
-
-
 }

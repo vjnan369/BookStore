@@ -1,69 +1,67 @@
 package com.example;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
 
-public class BookStore {
-    private ArrayList<Stock> books;
-    private String storeArea;
-    private int totalBooks;
+public class BookStore implements Store{
+    private List<Book> books = new ArrayList<Book>();
+    private String storeId;
 
-    BookStore() {
-        this.books = new ArrayList<Stock>();
-        this.totalBooks = 0;
-        this.storeArea = "500sft";
+    BookStore(String storeId) {
+        this.storeId = storeId;
     }
 
-    ArrayList<Stock> getBooksList() {
-        return books;
+    // will add a new book to the store
+    public void add(Book book) {
+        books.add(book);
     }
 
-    String getStoreArea() {
-        return storeArea;
+    // To get the book details of given bookid
+    public Book getBookDetails(String bookId) {
+        for(Book book : books) {
+            if (book.getBookId().equals(bookId)) {
+                return book;
+            }
+        }
+        throw new NoSuchElementException("Unable to find given book");
     }
 
-    public void returnBook(String str) {
-        Stock stock = null;
-        ArrayList<Stock> books = getBooksList();
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getTitle().equals(str)) {
-                stock = books.get(i);
+    // returns the total number of books available in store
+    public int getBooksCount(){
+        return books.size();
+    }
+
+    // returns store id of invoked object
+    public String getStoreId() {
+        return storeId;
+    }
+
+    // returns List of all books available in store.
+    public List<Book> getAllBooks() {
+        return Collections.unmodifiableList(books);
+    }
+
+    // removes the purchased book from store
+    // if the book is not available to purchase, it will throw an error.
+    public void purchase(String bookId) {
+        Book purchaseBook = null;
+        for(Book book : books) {
+            if(book.getBookId().equals(bookId)) {
+                purchaseBook = book;
                 break;
             }
         }
-        if (stock != null) {
-            stock.addQuantity(1);
+        if (purchaseBook == null) {
+            throw new NoSuchElementException("Unable to find given element");
         }
-    }
-
-
-    public void purchaseBook(String str) {
-        Stock stock = null;
-        ArrayList<Stock> books = getBooksList();
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getTitle().equals(str)) {
-                stock = books.get(i);
-                break;
-            }
+        int index = books.indexOf(purchaseBook);
+        if(index != -1) {
+            books.remove(purchaseBook);
+        }else {
+            throw new NoSuchElementException("Unable to find given book");
         }
-        stock.removeQuatity(1);
-    }
 
-    int getTotalBooks() {
-        return totalBooks;
     }
-
-    String getStockDispatch() {
-        return Book.stockDispatch;
-    }
-
-    Stock getBookDetails(String str) {
-        ArrayList<Stock> books = getBooksList();
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getTitle().equals(str)) {
-                return books.get(i);
-            }
-        }
-        return null;
-    }
-
 }

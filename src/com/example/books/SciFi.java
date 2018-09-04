@@ -1,4 +1,4 @@
-package com.example;
+package com.example.books;
 
 public class SciFi implements Book {
     String title;

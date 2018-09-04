@@ -1,9 +1,10 @@
-package com.example;
+package com.example.books;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import com.example.exceptions.OutofStockException;
 
 public class BookStore implements Store{
     private List<Book> books = new ArrayList<Book>();
@@ -19,14 +20,15 @@ public class BookStore implements Store{
     }
 
     // To get the book details of given bookid
-    public Book getBookDetails(String bookId) {
+    public Book getBookDetails(String bookId) throws OutofStockException {
         for(Book book : books) {
             if (book.getBookId().equals(bookId)) {
                 return book;
             }
         }
-        throw new NoSuchElementException("Unable to find given book");
+        throw new OutofStockException("Unable to find given book");
     }
+
 
     // returns the total number of books available in store
     public int getBooksCount(){
@@ -45,7 +47,7 @@ public class BookStore implements Store{
 
     // removes the purchased book from store
     // if the book is not available to purchase, it will throw an error.
-    public void purchase(String bookId) {
+    public void purchase(String bookId) throws OutofStockException {
         Book purchaseBook = null;
         for(Book book : books) {
             if(book.getBookId().equals(bookId)) {
@@ -54,7 +56,7 @@ public class BookStore implements Store{
             }
         }
         if (purchaseBook == null) {
-            throw new NoSuchElementException("Unable to find given element");
+            throw new OutofStockException("Unable to find given element");
         }
         int index = books.indexOf(purchaseBook);
         if(index != -1) {

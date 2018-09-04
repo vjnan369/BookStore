@@ -1,12 +1,12 @@
-package com.example;
+package com.example.books;
 
-public class Biography implements Book {
+public class History implements Book {
     String title;
     String bookId;
     Double price;
     String author;
 
-    Biography(String title, String bookId, Double price, String author){
+    History(String title, String bookId, Double price, String author){
         this.title = title;
         this.bookId = bookId;
         this.price = price;

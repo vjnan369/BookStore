@@ -1,4 +1,4 @@
-package com.example;
+package com.example.books;
 
 interface Book{
     Double getPrice();
